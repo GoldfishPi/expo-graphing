@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import BarChart from './src/Graph';
+import Sparkline from './src/Sparkline';
 
 const data = [
     { label: 'Jan', value: 500 },
@@ -21,6 +22,7 @@ export default function App() {
     return (
         <View>
             <BarChart data={ data }/>
+            <Sparkline data={ data }/>
         </View>
     );
 }

@@ -2,14 +2,13 @@ import React, { FC } from 'react';
 import Svg, {G, Line, Polyline, Path} from 'react-native-svg';
 import {scalePoint, NumberValue, scaleLinear, max, line} from 'd3';
 
-interface GraphProps {
+interface SparklineProps {
     data:Array<{label:string, value:number}>;
 }
 
 const GRAPH_MARGIN = 20;
-const GRAPH_BAR_WIDTH = 5;
 
-const Graph:FC<GraphProps> = ({ data }) => {
+const Sparkline:FC<SparklineProps> = ({ data }) => {
     const SVGHeight = 300
     const SVGWidth = 300
     const graphHeight = SVGHeight - 2 * GRAPH_MARGIN
@@ -30,20 +29,22 @@ const Graph:FC<GraphProps> = ({ data }) => {
         .domain(yDomain)
         .range(yRange)
 
-    const lineString = data.map(item => (
-            [(x(item.label) || 0) - GRAPH_BAR_WIDTH / 2, (y(item.value) || 0) * -1]
+    const lineStuff = data.map((item, index) => (
+            [(x(item.label) || 0) / 2, y(item.value) * -1]
     ))
+    console.log('line stuff', lineStuff)
 
-    // I give up for now.
-    //const p = line()(lineString.join(' '))
+    const formattedLineStuff = line()(lineStuff)
+    console.log('formatted', formattedLineStuff)
 
     return (
         <Svg width={SVGWidth} height={SVGHeight}>
             <G y={graphHeight}>
-                <Polyline
-                  points={lineString}
+
+                <Path
+                  d={formattedLineStuff}
                   fill="none"
-                  stroke="orange"
+                  stroke="red"
                   strokeWidth="3"
                 />
             </G>
@@ -51,4 +52,12 @@ const Graph:FC<GraphProps> = ({ data }) => {
     );
 };
 
-export default Graph;
+export default Sparkline;
+
+// This is actually what is used in sparkline btw
+// <Polyline
+//   points={lineStuff}
+//   fill="none"
+//   stroke="orange"
+//   strokeWidth="3"
+// />
